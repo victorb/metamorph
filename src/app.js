@@ -3,6 +3,7 @@ const make_expansion = require('./gpt/make_expansion');
 const make_edit = require('./gpt/make_edit');
 const apply_edits = require('./utils/apply_edits');
 const preserve_history = require('./utils/preserve_history');
+const temperature_setting = require('./utils/temperature_setting');
 
 async function main() {
   console.log('### Crafting proposal ###');

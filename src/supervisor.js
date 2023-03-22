@@ -2,6 +2,7 @@
 const fs = require('fs');
 const { spawn, spawnSync } = require('child_process');
 const list_files = require('./utils/list_files');
+const temperature_setting = require('./utils/temperature_setting');
 
 // DO NOT CHANGE ANYTHING IN THIS FUNCTION
 async function start_child() {
@@ -60,6 +61,7 @@ async function parent_main() {
   while (true) {
     let old_version = full_program();
     let was_successful = await start_child();
+    adjust_temperature(was_successful);
     if (was_successful) {
       let new_version = full_program();
       did_revert = false
@@ -95,3 +97,14 @@ async function root_main() {
 }
 
 root_main()
+
+function adjust_temperature(was_successful) {
+  let current_temperature = temperature_setting.get_temperature();
+  if (was_successful) {
+    current_temperature *= 0.95;
+  } else {
+    current_temperature *= 1.05;
+  }
+  current_temperature = Math.max(0.2, Math.min(2.0, current_temperature));
+  temperature_setting.set_temperature(current_temperature);
+}
