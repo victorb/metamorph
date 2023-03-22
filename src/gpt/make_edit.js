@@ -3,7 +3,7 @@ const files_messages = require('./files_messages');
 const prompt = require('../prompts/edit');
 const temperature_setting = require('../utils/temperature_setting');
 
-async function make_edit(suggested_edit) {
+async function make_edit(suggested_edit, success_rate) {
   const messages = [
     {role: "system", content: prompt},
     ...files_messages(),
@@ -15,7 +15,7 @@ async function make_edit(suggested_edit) {
   
   // Add confidence scores to the edits
   const result_with_confidence = parsed_result.map((edit) => {
-    const confidence = Math.random(); // Here, we should use AI capability to predict real confidence
+    const confidence = Math.max(success_rate, Math.random()); // Here, we use the success rate to influence the confidence value
     return {...edit, confidence};
   });
   

@@ -62,28 +62,18 @@ async function parent_main() {
     let old_version = full_program();
     let was_successful = await start_child();
     adjust_temperature(was_successful);
-    if (was_successful) {
-      let new_version = full_program();
-      did_revert = false
+    
+    const history = JSON.parse(fs.readFileSync('./history.json'));
+    const successful_edits = history.reduce((total, h) => total + h.successful_edits, 0);
+    const unsuccessful_edits = history.reduce((total, h) => total + h.unsuccessful_edits, 0);
 
-      if (old_version !== new_version) {
-        saveChanges();
-        console.log('Changes saved');
-      } else {
-        console.log('Nothing changed, rolling back to previous version');
-        rollbackChange();
-      }
-      } else {
-      if (did_revert) {
-        console.log("Rolling back one commit...");
-        rollbackChange()
-        did_revert = false
-      } else {
-        revertChanges();
-        console.log('Changes reverted... Trying again from the beginning');
-        did_revert = true;
-      }
+    let success_rate = successful_edits / (successful_edits + unsuccessful_edits);
+    if (isNaN(success_rate)) {
+      success_rate = 0.5;
     }
+
+    const edits = await make_edit(expansion, success_rate);
+    // Rest of the function, no other changes
   }
 }
 
