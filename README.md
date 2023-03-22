@@ -1,6 +1,7 @@
 # metamorph
-
 > Experiment in letting GPT-4 editing a program by itself. What program? Well, the program that lets GPT-4 edit itself.
+
+https://user-images.githubusercontent.com/459764/227037443-f42db412-b933-4430-929a-d63a26f7929b.mp4
 
 Many approaches were tried, but ultimately what you see implemented here is what "won" in terms of speed and correctness of generates changes. Some other approaches I tried:
 
