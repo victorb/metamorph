@@ -21,7 +21,7 @@ I tried many approaches, but ultimately the one implemented here "won" in terms 
 
 And finally, the approach that won:
 
--     Modularize the JavaScript program as much as possible, with one function per file, and have the "edit AI" return a JSON array with objects containing the filename and new contents. This works well, albeit a bit slow. Not as slow as generating a full file, but still somewhat slow. The dataset also seems to contain a bunch of JavaScript, as it doesn't generate invalid JavaScript that often (compared to Clojure, Rust, or what I "generate" with my liquid and meaty CPU).
+- Modularize the JavaScript program as much as possible, with one function per file, and have the "edit AI" return a JSON array with objects containing the filename and new contents. This works well, albeit a bit slow. Not as slow as generating a full file, but still somewhat slow. The dataset also seems to contain a bunch of JavaScript, as it doesn't generate invalid JavaScript that often (compared to Clojure, Rust, or what I "generate" with my liquid and meaty CPU).
 
 Initially, I allowed the AI to edit the supervisor process as well, which is responsible for restarting the self-editing process from the beginning after each change and persisting those changes. However, this quickly led to GPT somehow ruining itself, so I had to make GPT avoid changing it. Did it listen? Most of the times, yeah but sometimes not...
 
