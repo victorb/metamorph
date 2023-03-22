@@ -8,7 +8,17 @@ async function make_edit(suggested_edit) {
     ...files_messages(),
     {role: "user", content: suggested_edit}
   ]
-  return send(messages, 0.3)
+  
+  const raw_result = await send(messages, 0.3)
+  const parsed_result = JSON.parse(raw_result);
+  
+  // Add confidence scores to the edits
+  const result_with_confidence = parsed_result.map((edit) => {
+    const confidence = Math.random(); // Here, we should use AI capability to predict real confidence
+    return {...edit, confidence};
+  });
+  
+  return JSON.stringify(result_with_confidence);
 }
 
-module.exports = make_edit
+module.exports = make_edit;
