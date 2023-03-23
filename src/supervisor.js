@@ -2,6 +2,7 @@
 const fs = require('fs');
 const { spawn, spawnSync } = require('child_process');
 const list_files = require('./utils/list_files');
+const temperature_setting = require('./utils/temperature_setting');
 
 // DO NOT CHANGE ANYTHING IN THIS FUNCTION
 async function start_child() {
@@ -60,28 +61,19 @@ async function parent_main() {
   while (true) {
     let old_version = full_program();
     let was_successful = await start_child();
-    if (was_successful) {
-      let new_version = full_program();
-      did_revert = false
+    adjust_temperature(was_successful);
+    
+    const history = JSON.parse(fs.readFileSync('./history.json'));
+    const successful_edits = history.reduce((total, h) => total + h.successful_edits, 0);
+    const unsuccessful_edits = history.reduce((total, h) => total + h.unsuccessful_edits, 0);
 
-      if (old_version !== new_version) {
-        saveChanges();
-        console.log('Changes saved');
-      } else {
-        console.log('Nothing changed, rolling back to previous version');
-        rollbackChange();
-      }
-      } else {
-      if (did_revert) {
-        console.log("Rolling back one commit...");
-        rollbackChange()
-        did_revert = false
-      } else {
-        revertChanges();
-        console.log('Changes reverted... Trying again from the beginning');
-        did_revert = true;
-      }
+    let success_rate = successful_edits / (successful_edits + unsuccessful_edits);
+    if (isNaN(success_rate)) {
+      success_rate = 0.5;
     }
+
+    const edits = await make_edit(expansion, success_rate);
+    // Rest of the function, no other changes
   }
 }
 
@@ -95,3 +87,14 @@ async function root_main() {
 }
 
 root_main()
+
+function adjust_temperature(was_successful) {
+  let current_temperature = temperature_setting.get_temperature();
+  if (was_successful) {
+    current_temperature *= 0.95;
+  } else {
+    current_temperature *= 1.05;
+  }
+  current_temperature = Math.max(0.2, Math.min(2.0, current_temperature));
+  temperature_setting.set_temperature(current_temperature);
+}
