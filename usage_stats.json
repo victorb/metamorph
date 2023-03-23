@@ -1,0 +1,10 @@
+{
+  "src/utils/prevent_circular_suggestion.js": 1,
+  "src/app.js": 6,
+  "src/utils/analyze_performance.js": 1,
+  "src/utils/preserve_history.js": 1,
+  "src/utils/code_usage_tracker.js": 1,
+  "src/gpt/make_proposal.js": 1,
+  "src/utils/performance_tracker.js": 1,
+  "src/gpt/make_optimization.js": 1
+}
